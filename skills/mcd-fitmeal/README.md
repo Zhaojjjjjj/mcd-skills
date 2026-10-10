@@ -90,6 +90,8 @@ Skill 为标准目录规范（`SKILL.md` + `scripts/`），Cherry Studio / Curso
 - [增肌期训练后加餐](examples/bulk-postworkout.md) —— 高蛋白加餐 + 预算约束
 - [在线演示页](docs/demo.html) —— 静态交互模拟（示例数据，直接浏览器打开）
 
+![演示截图](https://files.catbox.moe/405vi0.png)
+
 ## 确定性配餐脚本
 
 ```bash

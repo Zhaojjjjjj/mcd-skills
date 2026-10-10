@@ -25,6 +25,21 @@ M-CODE 麦当劳程序员创意开发大赛（1024 程序员节）参赛作品 �
 
 每个 Skill 目录下都有：`SKILL.md`（Agent 行为定义）、`scripts/`（确定性 Python 脚本，仅标准库）、`docs/demo.html`（单文件交互演示）、`examples/`（示例对话）。
 
+## 🖼️ 演示截图
+
+<table>
+<tr>
+<td><a href="skills/mcd-points-guardian/docs/demo.html"><img src="https://files.catbox.moe/8crfy2.png" alt="麦麦积分守卫演示"/></a><br/>🛡️ 麦麦积分守卫</td>
+<td><a href="skills/mcd-fitmeal/docs/demo.html"><img src="https://files.catbox.moe/405vi0.png" alt="麦麦营养师演示"/></a><br/>🥗 麦麦营养师</td>
+</tr>
+<tr>
+<td><a href="skills/mcd-party-buddy/docs/demo.html"><img src="https://files.catbox.moe/kxpujh.png" alt="麦麦派对通演示"/></a><br/>🎉 麦麦派对通</td>
+<td><a href="skills/mcd-lottery-ev/docs/demo.html"><img src="https://files.catbox.moe/wulehr.png" alt="麦麦抽奖精算演示"/></a><br/>🎰 麦麦抽奖精算</td>
+</tr>
+</table>
+
+> 静态演示页（含可交互抽奖机），页面内数据均为演示用模拟数据。统一导航：[docs/index.html](docs/index.html)。
+
 ## 一键安装
 
 ```bash

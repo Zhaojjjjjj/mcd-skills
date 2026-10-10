@@ -63,7 +63,9 @@ cp -r mcd-skills/skills/mcd-lottery-ev ~/.workbuddy/skills/
 
 ## 在线演示
 
-`docs/demo.html` 是单文件演示页（双击用浏览器打开即可），模拟"查活动 → 算 EV → 出建议 → 抽奖 → 战绩"全流程，还附带一个停不下来的抽奖机。**页面内数据均为演示用模拟数据。**
+`docs/demo.html` 是单文件演示页（双击用浏览器打开即可）
+
+![演示截图](https://files.catbox.moe/wulehr.png)，模拟"查活动 → 算 EV → 出建议 → 抽奖 → 战绩"全流程，还附带一个停不下来的抽奖机。**页面内数据均为演示用模拟数据。**
 
 ## 仓库结构
 

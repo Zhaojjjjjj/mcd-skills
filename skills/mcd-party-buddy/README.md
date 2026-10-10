@@ -61,6 +61,8 @@ git clone https://github.com/Zhaojjjjjj/mcd-skills.git && cp -r mcd-skills/skill
 
 也可以在浏览器里点开 [`docs/demo.html`](./docs/demo.html) 看四步预约流程的交互演示。
 
+![演示截图](https://files.catbox.moe/kxpujh.png)
+
 ## 仓库结构
 
 ```

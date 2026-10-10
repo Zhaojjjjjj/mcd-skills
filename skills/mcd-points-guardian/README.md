@@ -45,6 +45,8 @@ git clone https://github.com/Zhaojjjjjj/mcd-skills.git && cp -r mcd-skills/skill
 想先看效果？
 
 - 打开 [docs/demo.html](docs/demo.html)（纯静态单文件，双击即看完整交互流程）
+
+![演示截图](https://files.catbox.moe/8crfy2.png)
 - 或直接跑确定性脚本（内置演示数据，零配置）：
 
 ```bash

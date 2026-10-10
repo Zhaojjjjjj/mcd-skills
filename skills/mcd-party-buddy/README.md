@@ -59,7 +59,7 @@ git clone https://github.com/Zhaojjjjjj/mcd-skills.git && cp -r mcd-skills/skill
 
 **企业团建**（完整对话见 [`examples/team-meal.md`](./examples/team-meal.md)）：20 人团建走团餐流程，查助餐服务 → 配餐（含 2 素食 1 清真）→ `calculate-price` 算出实付 ¥928 → 确认 → 下单。
 
-也可以在浏览器里点开 [`docs/demo.html`](./docs/demo.html) 看四步预约流程的交互演示。
+也可以[在线试玩](https://zhaojjjjjj.github.io/mcd-skills/demos/party-buddy.html)，看四步预约流程的交互演示。
 
 ![演示截图](https://files.catbox.moe/kxpujh.png)
 

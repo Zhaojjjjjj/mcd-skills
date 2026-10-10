@@ -88,7 +88,7 @@ Skill 为标准目录规范（`SKILL.md` + `scripts/`），Cherry Studio / Curso
 
 - [减脂期午餐](examples/cut-lunch.md) —— 目标确认 → 搭配 → 算价 → 下单
 - [增肌期训练后加餐](examples/bulk-postworkout.md) —— 高蛋白加餐 + 预算约束
-- [在线演示页](docs/demo.html) —— 静态交互模拟（示例数据，直接浏览器打开）
+- [在线演示页](https://zhaojjjjjj.github.io/mcd-skills/demos/fitmeal.html) —— 静态交互模拟（示例数据）
 
 ![演示截图](https://files.catbox.moe/405vi0.png)
 

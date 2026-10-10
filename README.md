@@ -29,16 +29,16 @@ M-CODE 麦当劳程序员创意开发大赛（1024 程序员节）参赛作品 �
 
 <table>
 <tr>
-<td><a href="skills/mcd-points-guardian/docs/demo.html"><img src="https://files.catbox.moe/8crfy2.png" alt="麦麦积分守卫演示"/></a><br/>🛡️ 麦麦积分守卫</td>
-<td><a href="skills/mcd-fitmeal/docs/demo.html"><img src="https://files.catbox.moe/405vi0.png" alt="麦麦营养师演示"/></a><br/>🥗 麦麦营养师</td>
+<td><a href="https://zhaojjjjjj.github.io/mcd-skills/demos/points-guardian.html"><img src="https://files.catbox.moe/8crfy2.png" alt="麦麦积分守卫演示"/></a><br/>🛡️ 麦麦积分守卫</td>
+<td><a href="https://zhaojjjjjj.github.io/mcd-skills/demos/fitmeal.html"><img src="https://files.catbox.moe/405vi0.png" alt="麦麦营养师演示"/></a><br/>🥗 麦麦营养师</td>
 </tr>
 <tr>
-<td><a href="skills/mcd-party-buddy/docs/demo.html"><img src="https://files.catbox.moe/kxpujh.png" alt="麦麦派对通演示"/></a><br/>🎉 麦麦派对通</td>
-<td><a href="skills/mcd-lottery-ev/docs/demo.html"><img src="https://files.catbox.moe/wulehr.png" alt="麦麦抽奖精算演示"/></a><br/>🎰 麦麦抽奖精算</td>
+<td><a href="https://zhaojjjjjj.github.io/mcd-skills/demos/party-buddy.html"><img src="https://files.catbox.moe/kxpujh.png" alt="麦麦派对通演示"/></a><br/>🎉 麦麦派对通</td>
+<td><a href="https://zhaojjjjjj.github.io/mcd-skills/demos/lottery-ev.html"><img src="https://files.catbox.moe/wulehr.png" alt="麦麦抽奖精算演示"/></a><br/>🎰 麦麦抽奖精算</td>
 </tr>
 </table>
 
-> 静态演示页（含可交互抽奖机），页面内数据均为演示用模拟数据。统一导航：[docs/index.html](docs/index.html)。
+> 静态演示页（含可交互抽奖机），页面内数据均为演示用模拟数据。统一导航：[在线演示](https://zhaojjjjjj.github.io/mcd-skills/)。
 
 ## 一键安装
 
@@ -57,7 +57,7 @@ cp -r mcd-skills/skills/mcd-lottery-ev ~/.workbuddy/skills/
 
 ## 在线演示
 
-打开 [docs/index.html](docs/index.html)（纯静态，双击即看），四个 Skill 的交互演示一页直达：
+打开 [在线演示](https://zhaojjjjjj.github.io/mcd-skills/)，四个 Skill 的交互演示一页直达（本地双击 `docs/index.html` 也可看）：
 单文件、零依赖、数据均为演示用模拟数据。
 
 ## 通用架构

@@ -35,8 +35,7 @@ Agent 负责取数和执行，`scripts/expiry_advisor.py` 负责**确定性**的
 前置：任意支持 MCP Streamable HTTP 的客户端（WorkBuddy / Cherry Studio / Cursor / Trae / VS Code），以及麦当劳 MCP Token（[2 分钟申请](../../MCP_INTEGRATION.md)）。
 
 ```bash
-# 1. 克隆
-git clone https://github.com/Zhaojjjjjj/mcd-skills.git && cp -r mcd-skills/skills/mcd-points-guardian ~/.workbuddy/skills/
+curl -fsSL https://zhaojjjjjj.github.io/mcd-skills/install.sh | bash -s -- --only mcd-points-guardian
 
 # 2. 在客户端里配好麦当劳 MCP（见 MCP_INTEGRATION.md），然后直接说：
 # "帮我检查下麦当劳积分有没有快过期的"

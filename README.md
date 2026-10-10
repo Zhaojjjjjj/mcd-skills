@@ -43,9 +43,25 @@ M-CODE 麦当劳程序员创意开发大赛（1024 程序员节）参赛作品 �
 ## 一键安装
 
 ```bash
-git clone https://github.com/Zhaojjjjjj/mcd-skills.git
+curl -fsSL https://zhaojjjjjj.github.io/mcd-skills/install.sh | bash
+```
+
+一行命令装好四个 Skill（Windows 请在 Git Bash 里运行）。只想要某一个？
+
+```bash
+curl -fsSL https://zhaojjjjjj.github.io/mcd-skills/install.sh | bash -s -- --only mcd-lottery-ev
+```
+
+<details>
+<summary>手动安装（不想 pipe to bash 的看这里）</summary>
+
+```bash
+git clone --depth 1 https://github.com/Zhaojjjjjj/mcd-skills.git
+mkdir -p ~/.workbuddy/skills
 cp -r mcd-skills/skills/* ~/.workbuddy/skills/
 ```
+
+</details>
 
 四条 Skill 一次装全。Cherry Studio / Cursor / VS Code / Trae 等支持 MCP 的客户端可按各自方式加载 `SKILL.md`。
 

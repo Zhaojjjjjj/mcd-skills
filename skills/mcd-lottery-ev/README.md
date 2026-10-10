@@ -41,8 +41,7 @@ EV 口径完全透明：`单抽期望回报 = Σ(奖品概率 × 奖品估算价
 ## 一键安装
 
 ```bash
-git clone https://github.com/Zhaojjjjjj/mcd-skills.git
-cp -r mcd-skills/skills/mcd-lottery-ev ~/.workbuddy/skills/
+curl -fsSL https://zhaojjjjjj.github.io/mcd-skills/install.sh | bash -s -- --only mcd-lottery-ev
 ```
 
 然后按 [`MCP_INTEGRATION.md`](../../MCP_INTEGRATION.md) 接入麦当劳 MCP（去 open.mcd.cn/mcp 申请 Token，两分钟搞定），在 WorkBuddy 里直接问：

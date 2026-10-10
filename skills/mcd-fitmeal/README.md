@@ -57,7 +57,7 @@ flowchart LR
 ### 2. 一键安装
 
 ```bash
-git clone https://github.com/Zhaojjjjjj/mcd-skills.git && cp -r mcd-skills/skills/mcd-fitmeal ~/.workbuddy/skills/
+curl -fsSL https://zhaojjjjjj.github.io/mcd-skills/install.sh | bash -s -- --only mcd-fitmeal
 ```
 
 Skill 为标准目录规范（`SKILL.md` + `scripts/`），Cherry Studio / Cursor / VS Code / Trae 等支持 MCP 的客户端可按各自方式加载。

@@ -35,7 +35,7 @@ flowchart TD
 ## 一键安装
 
 ```bash
-git clone https://github.com/Zhaojjjjjj/mcd-skills.git && cp -r mcd-skills/skills/mcd-party-buddy ~/.workbuddy/skills/
+curl -fsSL https://zhaojjjjjj.github.io/mcd-skills/install.sh | bash -s -- --only mcd-party-buddy
 ```
 
 前置条件：

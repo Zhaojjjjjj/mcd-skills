@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>麦麦派对通 · 预约流程演示</title>
+<style>
+  :root { --red:#DA291C; --yellow:#FFC72C; --ink:#222; --muted:#8a8a8a; --bg:#FFF9F0; --card:#fff; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif; background:var(--bg); color:var(--ink); min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:32px 16px 64px; }
+  .wrap { width:100%; max-width:640px; }
+  header { text-align:center; margin-bottom:24px; }
+  header .logo { font-size:44px; }
+  header h1 { font-size:26px; margin:8px 0 4px; }
+  header h1 span { color:var(--red); }
+  header p { color:var(--muted); font-size:14px; }
+  .steps-bar { display:flex; gap:6px; margin:20px 0; }
+  .steps-bar div { flex:1; height:6px; border-radius:3px; background:#eee; transition:background .3s; }
+  .steps-bar div.on { background:var(--red); }
+  .card { background:var(--card); border-radius:16px; padding:28px 24px; box-shadow:0 8px 30px rgba(218,41,28,.08); border:1px solid #f3e2cf; }
+  .card h2 { font-size:18px; margin-bottom:6px; }
+  .card .sub { color:var(--muted); font-size:13px; margin-bottom:18px; }
+  .opt { display:block; width:100%; text-align:left; padding:14px 16px; margin:10px 0; border:2px solid #f0e4d2; border-radius:12px; background:#fff; font-size:15px; cursor:pointer; transition:all .2s; }
+  .opt:hover { border-color:var(--yellow); background:#fffdf5; }
+  .opt.sel { border-color:var(--red); background:#fff5f3; }
+  .opt small { display:block; color:var(--muted); font-size:12px; margin-top:4px; }
+  .nav { display:flex; justify-content:space-between; margin-top:22px; }
+  button.btn { padding:12px 28px; border:none; border-radius:999px; font-size:15px; cursor:pointer; }
+  .btn-ghost { background:#f5f0e8; color:var(--ink); }
+  .btn-main { background:var(--red); color:#fff; font-weight:600; }
+  .btn-main:disabled { background:#e5b7b1; cursor:not-allowed; }
+  .summary { background:#fffdf5; border:1px dashed var(--yellow); border-radius:12px; padding:16px; margin:6px 0 4px; font-size:14px; line-height:1.9; }
+  .summary b { color:var(--red); }
+  .success { text-align:center; padding:12px 0; }
+  .success .big { font-size:52px; }
+  .success h2 { margin:10px 0 6px; }
+  .order-no { display:inline-block; background:#222; color:var(--yellow); font-family:monospace; padding:8px 18px; border-radius:8px; margin:12px 0; letter-spacing:1px; }
+  .note { margin-top:26px; font-size:12px; color:var(--muted); text-align:center; line-height:1.8; }
+  .hidden { display:none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">🎉🍔</div>
+    <h1>麦麦派对通 <span>M-CODE</span> 演示</h1>
+    <p>模拟「城市 → 门店 → 日期 → 场次」四步预约流程 · 演示数据为模拟，真实数据来自麦当劳 MCP</p>
+  </header>
+
+  <div class="steps-bar" id="bar">
+    <div class="on"></div><div></div><div></div><div></div><div></div>
+  </div>
+
+  <!-- Step 1 -->
+  <div class="card" data-step="1">
+    <h2>Step 1 · 选择城市</h2>
+    <p class="sub">调用 MCP 工具 <code>query-party-city</code> 获取可办主题活动的城市</p>
+    <button class="opt" data-v="上海">上海 <small>可办门店 12 家</small></button>
+    <button class="opt" data-v="北京">北京 <small>可办门店 9 家</small></button>
+    <button class="opt" data-v="广州">广州 <small>可办门店 7 家</small></button>
+    <button class="opt" data-v="深圳">深圳 <small>可办门店 6 家</small></button>
+    <div class="nav"><span></span><button class="btn btn-main" data-next disabled>下一步 →</button></div>
+  </div>
+
+  <!-- Step 2 -->
+  <div class="card hidden" data-step="2">
+    <h2>Step 2 · 选择门店</h2>
+    <p class="sub">调用 MCP 工具 <code>query-party-store</code>（城市 = <b id="echo-city"></b>）</p>
+    <div id="stores"></div>
+    <div class="nav"><button class="btn btn-ghost" data-prev>← 上一步</button><button class="btn btn-main" data-next disabled>下一步 →</button></div>
+  </div>
+
+  <!-- Step 3 -->
+  <div class="card hidden" data-step="3">
+    <h2>Step 3 · 选择日期</h2>
+    <p class="sub">调用 MCP 工具 <code>query-partystore-date</code> · 建议至少提前 7 天预约</p>
+    <div id="dates"></div>
+    <div class="nav"><button class="btn btn-ghost" data-prev>← 上一步</button><button class="btn btn-main" data-next disabled>下一步 →</button></div>
+  </div>
+
+  <!-- Step 4 -->
+  <div class="card hidden" data-step="4">
+    <h2>Step 4 · 选择场次</h2>
+    <p class="sub">调用 MCP 工具 <code>query-partystore-session</code> · 儿童派对推荐下午场 🌟</p>
+    <div id="sessions"></div>
+    <div class="nav"><button class="btn btn-ghost" data-prev>← 上一步</button><button class="btn btn-main" data-next disabled>下一步 →</button></div>
+  </div>
+
+  <!-- Step 5 confirm -->
+  <div class="card hidden" data-step="5">
+    <h2>Step 5 · 二次确认</h2>
+    <p class="sub">下单是真实动作，必须经你确认后才调用 <code>party-order-create</code></p>
+    <div class="summary" id="summary"></div>
+    <div class="nav"><button class="btn btn-ghost" data-prev>← 上一步</button><button class="btn btn-main" id="confirm">确认下单 🎉</button></div>
+  </div>
+
+  <!-- Done -->
+  <div class="card hidden" data-step="6">
+    <div class="success">
+      <div class="big">🎊</div>
+      <h2>派对预约成功！</h2>
+      <p class="sub">订单已创建，请按短信指引到店</p>
+      <div class="order-no">MCD-20261017-8814</div>
+      <div class="summary" id="summary2" style="text-align:left"></div>
+      <button class="btn btn-ghost" id="restart" style="margin-top:16px">再订一场 →</button>
+    </div>
+  </div>
+
+  <p class="note">mcd-party-buddy · 麦麦派对通<br>M-CODE 麦当劳程序员创意开发大赛参赛作品（非麦当劳官方产品）<br>真实接入请见 <code>MCP_INTEGRATION.md</code></p>
+</div>
+
+<script>
+const MOCK = {
+  stores: {
+    "上海": [["麦当劳南京东路餐厅","黄浦区 · 距你 1.2km"],["麦当劳陆家嘴中心餐厅","浦东新区 · 距你 3.5km"],["麦当劳徐家汇餐厅","徐汇区 · 距你 4.1km"]],
+    "北京": [["麦当劳王府井餐厅","东城区 · 距你 2.0km"],["麦当劳三里屯餐厅","朝阳区 · 距你 5.3km"],["麦当劳西单餐厅","西城区 · 距你 3.8km"]],
+    "广州": [["麦当劳天河城餐厅","天河区 · 距你 1.8km"],["麦当劳北京路餐厅","越秀区 · 距你 2.6km"]],
+    "深圳": [["麦当劳海岸城餐厅","南山区 · 距你 2.2km"],["麦当劳东门餐厅","罗湖区 · 距你 4.4km"]]
+  },
+  dates: [["2026-10-17","周六 · 还有位"],["2026-10-18","周日 · 还有位"],["2026-10-24","周六 · 余位紧张"]],
+  sessions: [["10:00–12:00","上午场"],["14:00–16:00","下午场 · 推荐 🌟"],["18:00–20:00","晚场"]]
+};
+const state = { city:"", store:"", date:"", session:"" };
+let step = 1;
+
+function paintBar(){ [...document.querySelectorAll("#bar div")].forEach((d,i)=>d.classList.toggle("on", i < step)); }
+function show(n){
+  step = n; paintBar();
+  document.querySelectorAll(".card").forEach(c=>c.classList.toggle("hidden", +c.dataset.step !== n));
+  if(n===2){ document.getElementById("echo-city").textContent = state.city; renderOpts("stores", MOCK.stores[state.city].map(s=>[s[0], s[1]]), "store"); }
+  if(n===3){ renderOpts("dates", MOCK.dates, "date"); }
+  if(n===4){ renderOpts("sessions", MOCK.sessions, "session"); }
+  if(n===5){
+    document.getElementById("summary").innerHTML =
+      `类型：<b>儿童生日派对</b>（10 人）<br>城市：<b>${state.city}</b><br>门店：<b>${state.store}</b><br>日期：<b>${state.date}</b><br>场次：<b>${state.session}</b>`;
+  }
+  if(n===6){ document.getElementById("summary2").innerHTML = document.getElementById("summary").innerHTML; }
+}
+function renderOpts(id, items, key){
+  const box = document.getElementById(id); box.innerHTML = "";
+  items.forEach(([v, sub])=>{
+    const b = document.createElement("button");
+    b.className = "opt"; b.innerHTML = `${v} <small>${sub}</small>`;
+    b.onclick = ()=>{
+      box.querySelectorAll(".opt").forEach(o=>o.classList.remove("sel"));
+      b.classList.add("sel"); state[key] = v;
+      box.closest(".card").querySelector("[data-next]").disabled = false;
+    };
+    box.appendChild(b);
+  });
+}
+document.querySelectorAll('[data-step="1"] .opt').forEach(b=>{
+  b.onclick = ()=>{
+    document.querySelectorAll('[data-step="1"] .opt').forEach(o=>o.classList.remove("sel"));
+    b.classList.add("sel"); state.city = b.dataset.v;
+    document.querySelector('[data-step="1"] [data-next]').disabled = false;
+  };
+});
+document.querySelectorAll("[data-next]").forEach(b=>b.onclick=()=>show(step+1));
+document.querySelectorAll("[data-prev]").forEach(b=>b.onclick=()=>show(step-1));
+document.getElementById("confirm").onclick = ()=>show(6);
+document.getElementById("restart").onclick = ()=>{ state.city=state.store=state.date=state.session=""; show(1); };
+</script>
+</body>
+</html>

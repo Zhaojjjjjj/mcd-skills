@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>麦麦 Skill 全家桶 · 演示导航</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; background: #fff; color: #222; padding: 48px 24px; }
+  .wrap { max-width: 880px; margin: 0 auto; }
+  h1 { font-size: 30px; margin-bottom: 8px; }
+  .sub { color: #888; margin-bottom: 36px; font-size: 15px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
+  .card { display: block; text-decoration: none; color: inherit; border: 1px solid #eee; border-radius: 14px; padding: 26px 24px; transition: box-shadow .2s, transform .2s; }
+  .card:hover { box-shadow: 0 8px 28px rgba(0,0,0,.08); transform: translateY(-2px); }
+  .card .emoji { font-size: 34px; }
+  .card h2 { font-size: 18px; margin: 12px 0 8px; }
+  .card p { font-size: 14px; color: #666; line-height: 1.7; }
+  .card .tag { display: inline-block; margin-top: 12px; font-size: 12px; color: #7C3AED; background: #f3edff; border-radius: 20px; padding: 3px 12px; }
+  .foot { margin-top: 40px; color: #aaa; font-size: 13px; text-align: center; }
+  .foot a { color: #7C3AED; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>麦麦 Skill 全家桶 🍔</h1>
+  <p class="sub">M-CODE 麦当劳程序员创意开发大赛参赛作品 · 四个 Skill 的交互演示，点击卡片进入（页面内数据均为演示用模拟数据）</p>
+  <div class="grid">
+    <a class="card" href="../skills/mcd-points-guardian/docs/demo.html">
+      <div class="emoji">🛡️</div>
+      <h2>麦麦积分守卫</h2>
+      <p>"3000 积分 7 天后过期？别让它蒸发。"查积分 → 过期预警 → 最优兑换 → 一键执行。</p>
+      <span class="tag">积分过期管家</span>
+    </a>
+    <a class="card" href="../skills/mcd-fitmeal/docs/demo.html">
+      <div class="emoji">🥗</div>
+      <h2>麦麦营养师</h2>
+      <p>减脂 / 增肌 / 控糖三模式，选目标 → 生成搭配 → 营养条 → 下单。</p>
+      <span class="tag">营养配餐</span>
+    </a>
+    <a class="card" href="../skills/mcd-party-buddy/docs/demo.html">
+      <div class="emoji">🎉</div>
+      <h2>麦麦派对通</h2>
+      <p>说需求 → 选城市门店 → 挑场次 → 下单成功，生日派对 / 团建一键预约。</p>
+      <span class="tag">零竞品赛道</span>
+    </a>
+    <a class="card" href="../skills/mcd-lottery-ev/docs/demo.html">
+      <div class="emoji">🎰</div>
+      <h2>麦麦抽奖精算</h2>
+      <p>查活动 → 算 EV → 出建议 → 抽奖 → 战绩复盘，附赠停不下来的抽奖机。</p>
+      <span class="tag">零竞品赛道</span>
+    </a>
+  </div>
+  <p class="foot">非麦当劳官方产品 · MIT License · <a href="https://github.com/Zhaojjjjjj/mcd-skills">GitHub</a></p>
+</div>
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>麦麦营养师 · mcd-fitmeal 演示</title>
+<style>
+  :root { --red: #DA291C; --gold: #FFC72C; --ink: #1f2937; --muted: #6b7280; --line: #e5e7eb; --bg: #fafafa; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: -apple-system, "PingFang SC", "Microsoft YaHei", system-ui, sans-serif; background: var(--bg); color: var(--ink); }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 24px 16px 64px; }
+  header { text-align: center; padding: 28px 0 8px; }
+  header h1 { margin: 0; font-size: 28px; }
+  header p { color: var(--muted); margin: 8px 0 0; }
+  .badge { display: inline-block; font-size: 12px; background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; border-radius: 999px; padding: 3px 12px; margin-top: 10px; }
+  .card { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 20px; margin-top: 16px; box-shadow: 0 1px 3px rgba(0,0,0,.04); }
+  .card h2 { margin: 0 0 14px; font-size: 17px; }
+  .modes { display: flex; gap: 10px; }
+  .mode { flex: 1; border: 2px solid var(--line); border-radius: 12px; padding: 12px 8px; text-align: center; cursor: pointer; background: #fff; }
+  .mode .t { font-size: 15px; font-weight: 700; }
+  .mode .d { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .mode.active { border-color: var(--red); background: #fef2f2; }
+  .row { display: flex; gap: 12px; margin-top: 14px; }
+  .field { flex: 1; }
+  .field label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+  .field input { width: 100%; font-size: 16px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; }
+  .btn { display: block; width: 100%; margin-top: 16px; padding: 13px; font-size: 16px; font-weight: 700; color: #fff; background: var(--red); border: none; border-radius: 12px; cursor: pointer; }
+  .btn:hover { filter: brightness(1.06); }
+  .combo { border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-top: 12px; background: #fff; }
+  .combo .name { font-weight: 700; font-size: 16px; }
+  .chips { margin-top: 8px; display: flex; gap: 6px; flex-wrap: wrap; }
+  .chip { font-size: 12px; border-radius: 999px; padding: 2px 10px; background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
+  .chip.warn { background: #fef2f2; color: #b91c1c; border-color: #fecaca; }
+  .macros { margin-top: 12px; }
+  .macro { display: flex; align-items: center; gap: 10px; margin-top: 7px; font-size: 13px; }
+  .macro .lb { width: 52px; color: var(--muted); }
+  .macro .bar { flex: 1; height: 10px; background: #f3f4f6; border-radius: 999px; overflow: hidden; }
+  .macro .fill { height: 100%; border-radius: 999px; }
+  .macro .vl { width: 64px; text-align: right; font-variant-numeric: tabular-nums; }
+  .f-p { background: #DA291C; } .f-f { background: #f59e0b; } .f-c { background: #3b82f6; }
+  .meta { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; }
+  .price { font-size: 18px; font-weight: 800; }
+  .order-btn { padding: 9px 18px; font-size: 14px; font-weight: 700; color: var(--red); background: #fff; border: 2px solid var(--red); border-radius: 10px; cursor: pointer; }
+  .empty { text-align: center; color: var(--muted); padding: 32px 0; font-size: 14px; }
+  .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45); align-items: center; justify-content: center; padding: 16px; }
+  .modal-bg.show { display: flex; }
+  .modal { background: #fff; border-radius: 16px; padding: 24px; max-width: 420px; width: 100%; }
+  .modal h3 { margin: 0 0 12px; }
+  .modal .note { font-size: 13px; color: var(--muted); background: #f9fafb; border-radius: 8px; padding: 10px 12px; margin-top: 12px; }
+  .modal .btn { margin-top: 14px; }
+  .ghost { background: #fff; color: var(--ink); border: 1px solid var(--line); }
+  footer { text-align: center; color: var(--muted); font-size: 12px; margin-top: 32px; line-height: 1.8; }
+  .steps { display: flex; gap: 8px; margin-top: 14px; }
+  .step { flex: 1; text-align: center; font-size: 12px; color: var(--muted); }
+  .step b { display: block; width: 26px; height: 26px; line-height: 26px; margin: 0 auto 6px; border-radius: 50%; background: #f3f4f6; color: var(--ink); font-size: 13px; }
+  .step.done b { background: var(--red); color: #fff; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>🍔 麦麦营养师</h1>
+    <p>mcd-fitmeal · 减脂 / 增肌 / 控糖人群的麦当劳配餐 Skill</p>
+    <span class="badge">M-CODE 参赛作品 · 本页为静态演示（示例数据）</span>
+  </header>
+
+  <div class="card">
+    <h2>① 选择你的目标</h2>
+    <div class="modes" id="modes">
+      <div class="mode active" data-mode="cut"><div class="t">🔥 减脂</div><div class="d">400–600 kcal<br>蛋白 ≥ 30g</div></div>
+      <div class="mode" data-mode="bulk"><div class="t">💪 增肌</div><div class="d">700–1000 kcal<br>蛋白 ≥ 45g</div></div>
+      <div class="mode" data-mode="sugar"><div class="t">🍃 控糖</div><div class="d">400–700 kcal<br>蛋白 ≥ 25g · 碳水 ≤ 45g</div></div>
+    </div>
+    <div class="row">
+      <div class="field"><label>热量上限 (kcal)</label><input id="calMax" type="number" value="600"></div>
+      <div class="field"><label>蛋白质下限 (g)</label><input id="proMin" type="number" value="30"></div>
+    </div>
+    <button class="btn" onclick="generate()">生成搭配 →</button>
+    <div class="steps">
+      <div class="step" id="s1"><b>1</b>选目标</div>
+      <div class="step" id="s2"><b>2</b>生成搭配</div>
+      <div class="step" id="s3"><b>3</b>看营养条</div>
+      <div class="step" id="s4"><b>4</b>下单</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>② 达标搭配 <span style="font-weight:400;font-size:13px;color:var(--muted)">（算法：蛋白密度优先）</span></h2>
+    <div id="results"><div class="empty">👆 先选目标，点「生成搭配」</div></div>
+  </div>
+
+  <footer>
+    演示页数据为示例，实际营养以麦当劳官方 MCP / 门店公示为准。<br>
+    mcd-fitmeal 为 M-CODE 大赛参赛作品，非麦当劳官方产品；营养建议仅供参考，不构成医疗建议。
+  </footer>
+</div>
+
+<div class="modal-bg" id="modalBg" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <h3>🧾 确认下单</h3>
+    <div id="orderBody"></div>
+    <div class="note">演示环境：实际使用时 Skill 会调用 <code>calculate-price</code> 算价（含券），你确认后调用 <code>create-order</code> 返回真实支付链接。</div>
+    <button class="btn" onclick="closeModal()">知道了</button>
+    <button class="btn ghost" onclick="closeModal()">再想想</button>
+  </div>
+</div>
+
+<script>
+// 示例菜单（演示用；实际数据来自 list-nutrition-foods）
+const MENU = [
+  {code:"S001", name:"麦香鸡（去酱版）", cat:"主食", kcal:375, p:29, f:13, c:38, na:620, price:15.0},
+  {code:"S002", name:"麦香鸡", cat:"主食", kcal:425, p:28, f:18, c:40, na:780, price:15.0},
+  {code:"S003", name:"板烧鸡腿堡", cat:"主食", kcal:400, p:23, f:14, c:42, na:800, price:21.0},
+  {code:"S004", name:"双层深海鳕鱼堡", cat:"主食", kcal:450, p:22, f:18, c:46, na:820, price:24.0},
+  {code:"S005", name:"巨无霸", cat:"主食", kcal:540, p:25, f:28, c:42, na:940, price:27.5},
+  {code:"S006", name:"麦乐鸡（5块）", cat:"小食", kcal:230, p:12, f:14, c:12, na:480, price:12.5},
+  {code:"S007", name:"玉米杯", cat:"小食", kcal:110, p:3, f:1, c:24, na:10, price:9.0},
+  {code:"S008", name:"脆薯条（小）", cat:"小食", kcal:220, p:3, f:11, c:28, na:150, price:9.0},
+  {code:"S009", name:"纯牛奶", cat:"饮料", kcal:150, p:8, f:8, c:11, na:120, price:9.0},
+  {code:"S010", name:"鲜煮咖啡（小）", cat:"饮料", kcal:5, p:0, f:0, c:1, na:5, price:10.0},
+  {code:"S011", name:"无糖可乐（小）", cat:"饮料", kcal:0, p:0, f:0, c:0, na:20, price:8.0}
+];
+const MODES = {
+  cut:   {calMin:400, calMax:600,  proMin:30, carbsMax:null, label:"减脂"},
+  bulk:  {calMin:700, calMax:1000, proMin:45, carbsMax:null, label:"增肌"},
+  sugar: {calMin:400, calMax:700,  proMin:25, carbsMax:45,   label:"控糖"}
+};
+let curMode = "cut", lastResults = [];
+
+document.getElementById("modes").addEventListener("click", e => {
+  const el = e.target.closest(".mode"); if (!el) return;
+  document.querySelectorAll(".mode").forEach(m => m.classList.remove("active"));
+  el.classList.add("active");
+  curMode = el.dataset.mode;
+  document.getElementById("calMax").value = MODES[curMode].calMax;
+  document.getElementById("proMin").value = MODES[curMode].proMin;
+  markStep(1);
+});
+
+function markStep(n){ for(let i=1;i<=4;i++) document.getElementById("s"+i).classList.toggle("done", i<=n); }
+
+function totals(items){
+  const t = {kcal:0,p:0,f:0,c:0,na:0,price:0};
+  items.forEach(i => { t.kcal+=i.kcal; t.p+=i.p; t.f+=i.f; t.c+=i.c; t.na+=i.na; t.price+=i.price; });
+  t.price = Math.round(t.price*100)/100;
+  return t;
+}
+
+function generate(){
+  const m = MODES[curMode];
+  const calMax = +document.getElementById("calMax").value || m.calMax;
+  const proMin = +document.getElementById("proMin").value || m.proMin;
+  const mains = MENU.filter(i=>i.cat==="主食"), sides = MENU.filter(i=>i.cat==="小食"), drinks = MENU.filter(i=>i.cat==="饮料");
+  const out = [];
+  mains.forEach(main => {
+    [null,...sides].forEach(side => {
+      [null,...drinks].forEach(drink => {
+        const combo = [main,side,drink].filter(Boolean);
+        const t = totals(combo);
+        if (t.kcal < m.calMin || t.kcal > calMax) return;
+        if (t.p < proMin) return;
+        if (m.carbsMax != null && t.c > m.carbsMax) return;
+        out.push({combo, t, density: t.p/Math.max(t.kcal,1)*100});
+      });
+    });
+  });
+  out.sort((a,b)=> b.density-a.density || a.t.na-b.t.na || a.t.price-b.t.price);
+  lastResults = out.slice(0,5);
+  render(lastResults, calMax, proMin, m);
+  markStep(3);
+}
+
+function barRow(label, grams, maxG, cls){
+  const w = maxG ? Math.round(grams/maxG*100) : 0;
+  return `<div class="macro"><span class="lb">${label}</span><span class="bar"><span class="fill ${cls}" style="width:${w}%"></span></span><span class="vl">${grams}g</span></div>`;
+}
+
+function render(results, calMax, proMin, m){
+  const box = document.getElementById("results");
+  if (!results.length){ box.innerHTML = `<div class="empty">😅 没有达标组合，试试放宽热量上限或降低蛋白质目标</div>`; return; }
+  box.innerHTML = results.map((r,idx)=>{
+    const names = r.combo.map(i=>i.name).join(" + ");
+    const maxG = Math.max(r.t.p, r.t.f, r.t.c, 1);
+    const kcalOk = r.t.kcal<=calMax, pOk = r.t.p>=proMin;
+    return `<div class="combo">
+      <div class="name">${idx===0?"⭐ ":""}${names}</div>
+      <div class="chips">
+        <span class="chip ${kcalOk?"":"warn"}">热量 ${r.t.kcal} kcal</span>
+        <span class="chip ${pOk?"":"warn"}">蛋白质 ${r.t.p}g</span>
+        <span class="chip">钠 ${r.t.na}mg</span>
+        <span class="chip">蛋白密度 ${r.density.toFixed(1)}g/100kcal</span>
+      </div>
+      <div class="macros">
+        ${barRow("蛋白质", r.t.p, maxG, "f-p")}
+        ${barRow("脂肪", r.t.f, maxG, "f-f")}
+        ${barRow("碳水", r.t.c, maxG, "f-c")}
+      </div>
+      <div class="meta">
+        <span class="price">¥${r.t.price.toFixed(1)}</span>
+        <button class="order-btn" onclick="order(${idx})">用这套下单</button>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function order(idx){
+  const r = lastResults[idx];
+  const names = r.combo.map(i=>`· ${i.name}`).join("<br>");
+  document.getElementById("orderBody").innerHTML =
+    `${names}<br><br><b>总计：${r.t.kcal} kcal / 蛋白质 ${r.t.p}g / ¥${r.t.price.toFixed(1)}</b>`;
+  document.getElementById("modalBg").classList.add("show");
+  markStep(4);
+}
+function closeModal(){ document.getElementById("modalBg").classList.remove("show"); }
+</script>
+</body>
+</html>

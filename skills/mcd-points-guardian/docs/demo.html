@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>麦麦积分守卫 · 交互演示</title>
+<style>
+  :root{
+    --red:#DA291C; --red-dark:#b32015; --yellow:#FFC72C;
+    --ink:#1f2937; --muted:#6b7280; --bg:#faf7f2; --card:#ffffff;
+    --line:#f0e8dc; --green:#16a34a; --orange:#ea580c;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+       background:var(--bg); color:var(--ink); line-height:1.6;}
+  header{background:linear-gradient(135deg,var(--red),var(--red-dark)); color:#fff;
+         padding:28px 20px; text-align:center;}
+  header h1{font-size:22px; letter-spacing:1px;}
+  header p{opacity:.85; font-size:13px; margin-top:6px;}
+  .wrap{max-width:720px; margin:0 auto; padding:20px 16px 60px;}
+  .stepper{display:flex; gap:6px; margin:18px 0 22px;}
+  .step{flex:1; text-align:center; font-size:12px; color:var(--muted);
+        padding:10px 4px; background:#fff; border:1px solid var(--line);
+        border-radius:10px; transition:all .2s;}
+  .step .n{display:block; font-size:16px; font-weight:700; margin-bottom:2px;}
+  .step.active{border-color:var(--red); color:var(--red); box-shadow:0 0 0 1px var(--red);}
+  .step.done{border-color:var(--green); color:var(--green);}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:16px;
+        padding:20px; margin-bottom:14px; box-shadow:0 2px 10px rgba(0,0,0,.04);}
+  .card h3{font-size:16px; margin-bottom:10px;}
+  .tool{display:inline-block; font-size:12px; background:#1f2937; color:#a7f3d0;
+        border-radius:6px; padding:3px 10px; margin:4px 6px 4px 0; font-family:monospace;}
+  .stat{display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px dashed var(--line); font-size:14px;}
+  .stat:last-child{border-bottom:none;}
+  .stat b{font-size:16px;}
+  .danger{color:var(--red); font-weight:700;}
+  .warn-card{border-left:5px solid var(--red); background:#fef2f2;}
+  .ok-card{border-left:5px solid var(--green); background:#f0fdf4;}
+  .plan{border:2px solid var(--line); border-radius:12px; padding:14px; margin:10px 0;
+        cursor:pointer; transition:all .15s; position:relative;}
+  .plan:hover{border-color:#f3b8b2;}
+  .plan.sel{border-color:var(--red); box-shadow:0 0 0 1px var(--red); background:#fffafa;}
+  .plan .tag{position:absolute; top:-11px; right:12px; background:var(--yellow); color:#7c2d12;
+             font-size:12px; font-weight:700; padding:2px 10px; border-radius:20px;}
+  .plan .meta{font-size:13px; color:var(--muted); margin-top:6px;}
+  .plan .meta b{color:var(--ink);}
+  .btn{display:inline-block; border:none; cursor:pointer; font-size:15px; font-weight:600;
+       border-radius:10px; padding:12px 26px; transition:all .15s;}
+  .btn-red{background:var(--red); color:#fff;}
+  .btn-red:hover{background:var(--red-dark);}
+  .btn-ghost{background:#fff; color:var(--ink); border:1px solid var(--line); margin-right:10px;}
+  .btn:disabled{background:#d1d5db; cursor:not-allowed;}
+  .nav{margin-top:16px; display:flex; justify-content:space-between;}
+  .modal-bg{position:fixed; inset:0; background:rgba(0,0,0,.45); display:none;
+            align-items:center; justify-content:center; z-index:50; padding:20px;}
+  .modal-bg.show{display:flex;}
+  .modal{background:#fff; border-radius:16px; padding:24px; max-width:420px; width:100%;}
+  .modal h3{margin-bottom:12px;}
+  .modal .row{display:flex; justify-content:space-between; font-size:14px; padding:6px 0; border-bottom:1px dashed var(--line);}
+  .modal .actions{margin-top:18px; text-align:right;}
+  .progress{height:10px; background:#eee; border-radius:6px; overflow:hidden; margin:14px 0;}
+  .progress i{display:block; height:100%; width:0; background:linear-gradient(90deg,var(--yellow),var(--red)); transition:width .3s;}
+  .code{font-family:monospace; background:#f6f1e7; padding:2px 8px; border-radius:6px; font-size:13px;}
+  footer{text-align:center; color:var(--muted); font-size:12px; margin-top:30px;}
+  .fade{animation:fade .35s ease;}
+  @keyframes fade{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;}}
+</style>
+</head>
+<body>
+<header>
+  <h1>🍔 麦麦积分守卫 · 交互演示</h1>
+  <p>mcd-points-guardian · 查积分 → 预警 → 推荐兑换 → 一键执行（演示数据，非真实兑换）</p>
+</header>
+
+<div class="wrap">
+  <div class="stepper" id="stepper"></div>
+  <div id="stage"></div>
+  <footer>M-CODE 麦当劳程序员创意开发大赛参赛作品 · 非麦当劳官方产品<br>演示页为纯静态单文件，所有数据均为模拟</footer>
+</div>
+
+<div class="modal-bg" id="modalBg">
+  <div class="modal">
+    <h3>⚠️ 兑换确认</h3>
+    <div id="modalBody"></div>
+    <p style="font-size:13px;color:var(--muted);margin-top:10px;">兑换将真实扣除积分，请确认无误。</p>
+    <div class="actions">
+      <button class="btn btn-ghost" onclick="closeModal()">再想想</button>
+      <button class="btn btn-red" onclick="doRedeem()">确认兑换</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const STEPS = ["查积分", "过期预警", "推荐兑换", "一键执行"];
+let step = 1, selected = 0, accountShown = false;
+
+const PLANS = [
+  {name:"麦辣鸡腿堡单人餐券", qty:2, cost:5000, value:50.0, per1k:10.0, rescue:3000,
+   note:"一次性救下全部 7 天后到期的积分", tag:"最推荐"},
+  {name:"巨无霸单人餐券 ×1 + 10块麦乐鸡券 ×1", qty:2, cost:4600, value:43.0, per1k:9.3, rescue:3000,
+   note:"组合更灵活，两顿饭有着落", tag:""},
+  {name:"中薯券 ×2 + 圆筒券 ×1", qty:3, cost:3200, value:23.0, per1k:7.2, rescue:3000,
+   note:"花得最少，但单位价值偏低", tag:""},
+];
+
+function renderStepper(){
+  document.getElementById("stepper").innerHTML = STEPS.map((s,i)=>{
+    const n=i+1, cls=n===step?"active":(n<step?"done":"");
+    return `<div class="step ${cls}"><span class="n">${n<step?"✓":n}</span>${s}</div>`;
+  }).join("");
+}
+function toolChip(name){ return `<span class="tool">🔧 MCP · ${name}</span>`; }
+
+function step1(){
+  return `<div class="card fade">
+    <h3>① 查询积分账户</h3>
+    <p style="font-size:14px;color:var(--muted);margin-bottom:12px;">
+      Agent 并行调用 <b>now-time-info</b>（拿今天）与 <b>query-my-account</b>（拿积分账户），作为过期计算的基准。</p>
+    <button class="btn btn-red" onclick="showAccount()">查询积分账户</button>
+    <div id="acct" style="margin-top:14px;"></div>
+  </div>
+  <div class="nav"><span></span><button class="btn btn-red" id="next1" disabled onclick="go(2)">下一步 →</button></div>`;
+}
+function showAccount(){
+  if(accountShown) return; accountShown=true;
+  document.getElementById("acct").innerHTML = `<div class="fade">
+    ${toolChip("now-time-info")}${toolChip("query-my-account")}
+    <div class="stat"><span>可用积分</span><b>8000</b></div>
+    <div class="stat"><span>冻结积分</span><b>0</b></div>
+    <div class="stat"><span>即将过期（7 天后）</span><b class="danger">3000 🔴</b></div>
+    <div class="stat"><span>即将过期（30 天后）</span><b>1500 🟢</b></div>
+  </div>`;
+  document.getElementById("next1").disabled=false;
+}
+
+function step2(){
+  return `<div class="card warn-card fade">
+    <h3>⚠️ 过期预警</h3>
+    ${toolChip("query-my-account")}
+    <p style="font-size:15px;margin:8px 0;"><b class="danger">3000 积分</b>将于 <b>7 天后（2026-10-17）</b>过期，<br>
+    按商城价约等于 <b class="danger">¥30 蒸发</b>。另有 1500 积分 30 天后过期，暂无压力。</p>
+    <p style="font-size:13px;color:var(--muted);">风险分级：≤3 天 🔴紧急 / ≤7 天 🟠偏高 / ≤14 天 🟡注意 / >14 天 🟢健康</p>
+  </div>
+  <div class="nav"><button class="btn btn-ghost" onclick="go(1)">← 上一步</button>
+  <button class="btn btn-red" onclick="go(3)">去算最优方案 →</button></div>`;
+}
+
+function step3(){
+  const cards = PLANS.map((p,i)=>`
+    <div class="plan ${i===selected?"sel":""}" onclick="selectPlan(${i})">
+      ${p.tag?`<span class="tag">${p.tag}</span>`:""}
+      <b>方案 ${i+1}：${p.name}</b>
+      <div class="meta">积分成本 <b>${p.cost}</b> ｜ 预估价值 <b>¥${p.value}</b> ｜
+        每千积分价值 <b>¥${p.per1k}</b><br>救下过期积分 <b class="danger">${p.rescue}</b> ｜ ${p.note}</div>
+    </div>`).join("");
+  return `<div class="card fade">
+    <h3>③ 推荐兑换方案</h3>
+    <p style="font-size:14px;color:var(--muted);margin-bottom:6px;">
+      Agent 拉取商城商品后，交由 <b>expiry_advisor.py</b> 确定性计算（过期优先 · 单位价值最大）：</p>
+    ${toolChip("mall-points-products")}${toolChip("expiry_advisor.py")}
+    <div style="margin-top:8px;">${cards}</div>
+    <button class="btn btn-red" style="margin-top:10px;" onclick="openModal()">按选中方案兑换</button>
+  </div>
+  <div class="nav"><button class="btn btn-ghost" onclick="go(2)">← 上一步</button><span></span></div>`;
+}
+function selectPlan(i){ selected=i; render(); }
+
+function openModal(){
+  const p=PLANS[selected];
+  document.getElementById("modalBody").innerHTML=`
+    <div class="row"><span>兑换方案</span><b>${p.name}</b></div>
+    <div class="row"><span>积分成本</span><b class="danger">${p.cost} 积分</b></div>
+    <div class="row"><span>预估价值</span><b>约 ¥${p.value}</b></div>
+    <div class="row"><span>救下过期积分</span><b>${p.rescue}</b></div>
+    ${p.cost>=5000?`<div class="row"><span>二次确认</span><b>≥5000 积分，已复述方案</b></div>`:""}`;
+  document.getElementById("modalBg").classList.add("show");
+}
+function closeModal(){ document.getElementById("modalBg").classList.remove("show"); }
+function doRedeem(){ closeModal(); go(4); }
+
+function step4(){
+  return `<div class="card fade">
+    <h3>④ 一键执行</h3>
+    ${toolChip("mall-create-order")}
+    <div id="execArea"><p style="font-size:14px;color:var(--muted);">正在提交兑换订单…</p>
+      <div class="progress"><i id="bar"></i></div></div>
+  </div>
+  <div class="nav"><button class="btn btn-ghost" onclick="go(3)">← 上一步</button>
+  <button class="btn btn-ghost" onclick="location.reload()">重新演示</button></div>
+  <script>void 0<\/script>`;
+}
+
+function finishExec(){
+  const p=PLANS[selected];
+  const orderNo="MCD-20261010-"+Math.floor(1000+Math.random()*9000);
+  const code="MCDPT-"+Math.random().toString(36).slice(2,6).toUpperCase()+"-"+
+             Math.random().toString(36).slice(2,6).toUpperCase();
+  document.getElementById("execArea").innerHTML=`<div class="fade">
+    <div class="card ok-card" style="margin:0 0 12px;">
+      <h3>✅ 兑换成功！</h3>
+      <div class="stat"><span>订单号</span><span class="code">${orderNo}</span></div>
+      <div class="stat"><span>券码</span><span class="code">${code}</span></div>
+      <div class="stat"><span>方案</span><b>${p.name}</b></div>
+      <div class="stat"><span>实扣积分</span><b class="danger">${p.cost}</b></div>
+    </div>
+    ${toolChip("query-my-coupons")}${toolChip("auto-bind-coupons")}
+    <p style="font-size:14px;margin-top:10px;">券已到账（有效期 30 天），另顺手一键领取了 3 张麦麦省券。<br>
+    剩余 1500 积分 30 天后过期，下个月再提醒你。演示数据，非真实兑换。</p>
+  </div>`;
+}
+
+function go(n){ step=n; render();
+  if(n===4){ let w=0; const t=setInterval(()=>{ w+=25;
+    const bar=document.getElementById("bar"); if(bar) bar.style.width=w+"%";
+    if(w>=100){ clearInterval(t); setTimeout(finishExec,350);} },280); } }
+
+function render(){
+  renderStepper();
+  const html = step===1?step1():step===2?step2():step===3?step3():step4();
+  document.getElementById("stage").innerHTML=html;
+}
+render();
+</script>
+</body>
+</html>
